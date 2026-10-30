@@ -6,7 +6,7 @@ let appPromise = null;
 
 async function getApp() {
   if (!appPromise) {
-    appPromise = import("../server/index.js").then((mod) => mod.default);
+    appPromise = import("../../server/index.js").then((mod) => mod.default);
   }
   return appPromise;
 }
