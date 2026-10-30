@@ -8,7 +8,6 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
-import { MongoMemoryServer } from "mongodb-memory-server";
 
 import { useBundledMongod } from "./config/mongo-binary.js";
 import { connectDB } from "./config/db.js";
@@ -82,15 +81,13 @@ app.get("/", (_req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-// ---- In-memory MongoDB fallback (only when MONGO_URI is not configured) ----
-// mongodb-memory-server is imported statically so Vercel's file tracing bundles
-// its mongod binary. When a real MONGO_URI exists, it is never started.
+// ---- Database bootstrap (single connection for the whole process) ----
+// With MONGO_URI set, this is just a normal connect. Without it, config/db.js
+// starts the in-memory MongoDB fallback (used for local dev and on Vercel).
+// Keeping ONE owner of the connection matters: importing this module must never
+// open a second database next to the one the caller already connected to.
 async function ensureDatabase() {
-  if (process.env.MONGO_URI) return connectDB();
-  useBundledMongod();
-  const memory = await MongoMemoryServer.create();
-  process.env.MONGO_URI = memory.getUri();
-  console.log("⚠️  No MONGO_URI — started in-memory MongoDB for this instance.");
+  if (!process.env.MONGO_URI) useBundledMongod();
   return connectDB();
 }
 
@@ -107,8 +104,10 @@ if (!isServerless && !process.env.TESTING) {
       console.error("MongoDB connection failed:", error.message);
       process.exit(1);
     });
-} else {
-  // Connect once per serverless instance (cached promise)
+} else if (isServerless) {
+  // Connect once per serverless instance (cached promise in config/db.js).
+  // Skipped when TESTING: the test runner owns the connection, so importing
+  // this module must not start a database of its own.
   ensureDatabase().catch((error) => console.error("MongoDB connection failed:", error.message));
 }
 
