@@ -1,0 +1,102 @@
+{
+ "user": {
+  "_id": "6ae392deef2d512294a5e181",
+  "name": "Sindhu",
+  "email": "demo@donezo.app",
+  "role": "user",
+  "createdAt": "2026-10-29T18:39:26.208Z"
+ },
+ "tasks": [
+  {
+   "_id": "6ae392deef2d512294a5e186",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "Finish the MERN todo app",
+   "notes": "",
+   "completed": false,
+   "priority": "high",
+   "category": "study",
+   "dueDate": "2026-10-31T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  },
+  {
+   "_id": "6ae392deef2d512294a5e187",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "Push the project to GitHub",
+   "notes": "",
+   "completed": false,
+   "priority": "high",
+   "category": "work",
+   "dueDate": "2026-10-29T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  },
+  {
+   "_id": "6ae392deef2d512294a5e188",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "Deploy on Vercel",
+   "notes": "",
+   "completed": false,
+   "priority": "medium",
+   "category": "work",
+   "dueDate": "2026-10-30T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  },
+  {
+   "_id": "6ae392deef2d512294a5e189",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "Buy groceries for the week",
+   "notes": "",
+   "completed": false,
+   "priority": "low",
+   "category": "shopping",
+   "dueDate": "2026-11-01T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  },
+  {
+   "_id": "6ae392deef2d512294a5e18a",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "30 minute evening walk",
+   "notes": "",
+   "completed": true,
+   "priority": "low",
+   "category": "health",
+   "dueDate": "2026-10-29T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  },
+  {
+   "_id": "6ae392deef2d512294a5e18b",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "Read 20 pages",
+   "notes": "Atomic Habits, chapter 5",
+   "completed": false,
+   "priority": "medium",
+   "category": "personal",
+   "dueDate": "2026-11-03T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  },
+  {
+   "_id": "6ae392deef2d512294a5e18c",
+   "user": "6ae392deef2d512294a5e181",
+   "title": "Revise Express middleware",
+   "notes": "",
+   "completed": false,
+   "priority": "medium",
+   "category": "study",
+   "dueDate": "2026-10-28T18:39:26.325Z",
+   "__v": 0,
+   "createdAt": "2026-10-29T18:39:26.327Z",
+   "updatedAt": "2026-10-29T18:39:26.327Z"
+  }
+ ]
+}
