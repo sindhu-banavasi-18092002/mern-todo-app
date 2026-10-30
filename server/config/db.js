@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import os from "node:os";
+import fs from "node:fs";
 import path from "node:path";
 
 let memoryServer = null;
@@ -25,6 +26,11 @@ export function connectDB() {
       // Cache the downloaded mongod binary in the user's home, not the project
       if (!process.env.MONGOMS_DOWNLOAD_DIR) {
         process.env.MONGOMS_DOWNLOAD_DIR = path.join(os.homedir(), ".cache", "mongodb-binaries");
+      }
+      // On Vercel the binary is copied next to the function during the build
+      if (process.env.VERCEL) {
+        const bundled = path.join(process.cwd(), "mongod");
+        if (fs.existsSync(bundled)) process.env.MONGOMS_SYSTEM_BINARY = bundled;
       }
       memoryServer = await MongoMemoryServer.create();
       uri = memoryServer.getUri();

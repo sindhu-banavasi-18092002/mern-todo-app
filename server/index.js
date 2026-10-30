@@ -8,7 +8,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
+import { useBundledMongod } from "./config/mongo-binary.js";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import taskRoutes from "./routes/tasks.js";
@@ -33,6 +35,9 @@ const allowedOrigins = (process.env.CLIENT_ORIGIN || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+
+// Behind Vercel's proxy: trust the first hop so rate limiting sees real IPs
+app.set("trust proxy", 1);
 
 app.use(
   cors({
@@ -77,12 +82,24 @@ app.get("/", (_req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
+// ---- In-memory MongoDB fallback (only when MONGO_URI is not configured) ----
+// mongodb-memory-server is imported statically so Vercel's file tracing bundles
+// its mongod binary. When a real MONGO_URI exists, it is never started.
+async function ensureDatabase() {
+  if (process.env.MONGO_URI) return connectDB();
+  useBundledMongod();
+  const memory = await MongoMemoryServer.create();
+  process.env.MONGO_URI = memory.getUri();
+  console.log("⚠️  No MONGO_URI — started in-memory MongoDB for this instance.");
+  return connectDB();
+}
+
 // ---- Local server boot (skipped on Vercel, where api/index.js is the entry) ----
 const isServerless = Boolean(process.env.VERCEL);
 const PORT = process.env.PORT || 5000;
 
 if (!isServerless && !process.env.TESTING) {
-  connectDB()
+  ensureDatabase()
     .then(() => {
       app.listen(PORT, () => console.log(`🚀 API running at http://localhost:${PORT}`));
     })
@@ -92,7 +109,7 @@ if (!isServerless && !process.env.TESTING) {
     });
 } else {
   // Connect once per serverless instance (cached promise)
-  connectDB().catch((error) => console.error("MongoDB connection failed:", error.message));
+  ensureDatabase().catch((error) => console.error("MongoDB connection failed:", error.message));
 }
 
 export default app;
