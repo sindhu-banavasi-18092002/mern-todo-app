@@ -12,3 +12,7 @@ preview/
 coverage/
 
 .env*
+check-in-*.png
+check-in-*.pdf
+check-in-*.diff
+check-in-*-source/
