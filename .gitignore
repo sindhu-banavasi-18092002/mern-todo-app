@@ -5,6 +5,7 @@ dist/
 build/
 .cache/
 data/
+preview/
 .DS_Store
 *.log
 .vercel
